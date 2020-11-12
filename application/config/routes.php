@@ -72,6 +72,7 @@ $route['admin/karya/getSatker'] = 'admin/C_karya/getSatker';
 $route['admin/karya/get/(:any)'] = 'admin/C_karya/get/$1';
 $route['admin/karya/insert'] = 'admin/C_karya/insert';
 $route['admin/karya/update/(:any)'] = 'admin/C_karya/update/$1';
+$route['admin/karya/update/karya/(:any)'] = 'admin/C_karya/updateKarya/$1';
 $route['admin/karya/delete/(:any)'] = 'admin/C_karya/delete/$1';
 $route['admin/karya/set/(:any)/(:any)'] = 'admin/C_karya/set/$1/$2';
 
@@ -82,10 +83,13 @@ $route['admin/karya/konfirmasi'] = 'admin/C_karya/konfirmasi';
 
 
 // Home Route
-$route['karya'] = 'C_karya/beranda/';
 $route['karya/lihat/(:any)'] = 'C_karya/lihat/$1';
 $route['karya/tag/(:any)'] = 'C_karya/tag/$1';
+$route['karya/tag/(:any)/(:any)'] = 'C_karya/tag/$1/$2';
 $route['karya/cari/(:any)'] = 'C_karya/cari/$1';
+$route['karya/cari'] = 'C_karya/cari';
+$route['karya'] = 'C_karya/beranda/';
+$route['karya/(:any)'] = 'C_karya/beranda/$1';
 $route['karya/satuan/(:any)'] = 'C_karya/satuan/$1';
 $route['karya/satuan/lebih/(:any)'] = 'C_karya/satuan/';
 $route['karya/(:any)/(:any)'] = 'C_karya/karyaSatuan/$1';

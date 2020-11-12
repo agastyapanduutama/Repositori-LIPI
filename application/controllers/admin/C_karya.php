@@ -100,18 +100,24 @@ class C_karya extends CI_Controller
                 $status = "Belum Dikonfirmasi";
             }
 
-            if ($field->status == '3') {
+            if ($this->session->userdata('level') == 2 && $field->status == '3') {
                 $button = "
-                <button class='btn btn-danger btn-sm' id='delete' data-id='$idNa'><i class='fas fa-trash-alt'></i></button>
-                <button class='btn btn-success btn-sm' id='confirm' data-id='$idNa'><i class='fas fa-check-circle'></i></button>
-                <a href='karya/update/" . $field->id_karya . "' class='btn btn-warning btn-sm' id='edit' data-id='$idNa'><i class='fas fa-pencil-alt'></i></a>
-                <button class='btn btn-primary btn-sm' id='view' data-id='$idNa'><i class='fas fa-eye'></i></button>
+                <button class='btn btn-success btn-sm' id='confirm' title='Konfirmasi Karya' data-id='$idNa'><i class='fas fa-check-circle'></i></button>
+                <a href='update/" . $field->id_karya . "' title='Edit Karya' class='btn btn-warning btn-sm' id='edit' data-id='$idNa'><i class='fas fa-pencil-alt'></i></a>
+                <button title='Lihat Karya' class='btn btn-primary btn-sm' id='view' data-id='$idNa'><i class='fas fa-eye'></i></button>
+            ";
+            }
+
+            if ($this->session->userdata('level') == 3  && $field->status == '3') {
+                $button = "
+                <button class='btn btn-danger btn-sm' id='delete' title='Hapus Data' data-id='$idNa'><i class='fas fa-trash-alt'></i></button>
+                <a href='karya/update/" . $field->id_karya . "' title='Edit Karya' class='btn btn-warning btn-sm' id='edit' data-id='$idNa'><i class='fas fa-pencil-alt'></i></a>
+                <button title='Lihat Karya' class='btn btn-primary btn-sm' id='view' data-id='$idNa'><i class='fas fa-eye'></i></button>
             ";
             }
 
             if ($field->status == '1') {
                 $button = "
-                <button class='btn btn-danger btn-sm' id='delete' data-id='$idNa'><i class='fas fa-trash-alt'></i></button>
                 <button class='btn btn-primary btn-sm' id='view' data-id='$idNa'><i class='fas fa-eye'></i></button>";
             }
             
@@ -145,12 +151,12 @@ class C_karya extends CI_Controller
     function get($id)
     {
         $data = $this->karya->get($id);
-        foreach ($data as $key => $value) {
-            if (strtolower($key) == 'id_karya') {
-                $data->$key = $this->req->acak($value);
-            }
-        }
-        echo json_encode($data);
+        // foreach ($data as $key => $value) {
+        //     if (strtolower($key) == 'id_karya') {
+        //         $data->$key = $this->req->acak($value);
+        //     }
+        // }
+        // echo json_encode($data);
     }
 
     function insert()
@@ -177,16 +183,11 @@ class C_karya extends CI_Controller
             );
         }
 
-        // $this->req->print($_POST);
-        // $this->req->print($msg);
-
         $dataIsi = array(
             'file' =>  $msg['data'], 
         );
 
         $data = $this->req->all($dataIsi);
-
-        // $this->req->print($data);    
 
         if ($this->karya->insert($data) == true) {
             $msg = array(
@@ -201,25 +202,35 @@ class C_karya extends CI_Controller
         redirect(base_url('admin/karya'),'refresh');    
     }
 
-    function update()
+    function update($id)
     {
-        $id = $this->input->post('id_karya');
-        $data = $this->req->all(['id_karya' => false]);
+        $karyaDetail = $this->db->get('t_karya', ['id' => $id])->row();
+
+        $data = array(
+            'title' => 'Update' , 
+            'script' => 'karya',
+            'karya' => $karyaDetail,
+            'konten' => 'admin/karya/edit'
+        );
+
+        $this->load->view('admin/templates/wrapper', $data, FALSE);
+    }
+
+    
+
+    function updateKarya($id)
+    {
+        // $id = $this->input->post('id_karya');
+        $data = $this->req->all();
+
 
         if ($this->karya->update($data, array('id_karya' => $id)) == true) {
-            $msg = array(
-                'status' => 'ok',
-                'msg' => 'Berhasil mengubah data !'
-            );
+               $this->session->set_flashdata('success', 'Berhasil Meng-update Karya');
+                redirect(base_url('admin/dashboard'),'refresh');    
         } else {
-            $msg = array(
-                'status' => 'fail',
-                'msg' => 'Gagal mengubah data !'
-            );
-
-            echo $this->db->last_query();
+             $this->session->set_flashdata('failed', 'Terjadi Kesalahan Saat Update');
+                redirect(base_url('admin/dashboard'),'refresh');    
         }
-        echo json_encode($msg);
     }
 
 

@@ -56,8 +56,8 @@
 						<label>Tugas</label>
 						<select name="level" id="level" class="form-control">
 							<option value="1">Super Admin</option>
-							<option value="2">Kontributor</option>
-							<option value="3">Pustkawan</option>
+							<option value="2">Pustakawan</option>
+							<option value="3">Kontributor</option>
 						</select>
 					</div>
 

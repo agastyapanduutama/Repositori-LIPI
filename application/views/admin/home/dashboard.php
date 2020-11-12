@@ -1,5 +1,19 @@
+    <?php
+          if ($this->session->flashdata('success')) {
+            
+            echo '<div class="alert alert-sm alert-success">';
+            echo $this->session->flashdata('success');
+            echo '</div>';
 
-          <div class="row">
+          }elseif($this->session->flashdata('failed')){
+            
+            echo '<div class="alert alert-sm alert-warning">';
+            echo $this->session->flashdata('failed');
+            echo '</div>';
+         
+          }
+      ?>
+          <div class="row"> 
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card card-statistic-1">
                 <div class="card-icon bg-primary">

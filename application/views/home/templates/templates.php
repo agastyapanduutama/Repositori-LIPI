@@ -61,7 +61,7 @@
 							</li>
 
 							<li>
-								<a href="http://lipi.go.id/kontak">Tentang kami</a>
+								<a target="_blank" href="http://lipi.go.id/kontak">Tentang kami</a>
 							</li>
 
 						</ul>
@@ -258,28 +258,20 @@
 				<div class="col-md-8 col-lg-9 p-b-75">
 					<div class="p-r-50 p-r-0-lg">
 						<!-- item blog -->
-
 						<?php require 'content.php'; ?>
-						
-
-						
 					</div>
-
-					
 				</div>
+
+				
 
 
 				<!-- Navigasi Kanan -->
 				<div class="col-md-4 col-lg-3 p-b-75">
 					<div class="rightbar">
 						<!-- Search -->
-						<form>
+						<form action="<?= base_url('karya/cari')?>" method="GET">
 							<div class="pos-relative bo11 of-hidden">
-
-								<?php echo $aws = isset($_GET['pencarian']);?>
-								<input class="s-text7 size16 p-l-23 p-r-50" type="text" name="pencarian" value="<?= $aws?>" placeholder="Pencarian">
-
-
+								<input class="s-text7 size16 p-l-23 p-r-50" type="text" name="pencarian" value="" placeholder="Pencarian">
 								<button class="flex-c-m size5 ab-r-m color1 color0-hov trans-0-4">
 									<i class="fs-13 fa fa-search" aria-hidden="true"></i>
 								</button>
@@ -353,7 +345,6 @@
 			</div>
 		</div>
 	</section>
-
 
 	<!-- Footer -->
 	<footer class="bg6 p-t-45 p-b-43 p-l-45 p-r-45">

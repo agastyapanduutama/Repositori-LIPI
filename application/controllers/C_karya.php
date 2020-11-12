@@ -12,24 +12,52 @@ class C_karya extends CI_Controller {
 		$this->load->model('M_satker', 'satker');
 		$this->load->model('M_subjek', 'subjek');
 		$this->load->model('M_home', 'karya');
+		$this->load->library('pagination');
 		// $this->load->model('admin/m_karya', 'karya');
 	}
 
-	public function beranda()
+
+	public function beranda($page = null)
 	{
 
+        $config['base_url'] = base_url('karya'); 
+        $config['total_rows'] = $this->db->get('t_karya')->num_rows(); 
+		$config['per_page'] = 5; 
+		$from = $this->uri->segment(2);
 
-		
+		$config['first_link']       = 'Awal';
+        $config['last_link']        = 'Akhir';
+        $config['next_link']        = 'Selanjutnya';
+        $config['prev_link']        = 'Sebelumnya';
+        $config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+        $config['full_tag_close']   = '</ul></nav></div>';
+        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close']    = '</span></li>';
+        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close']  = '</span>Next</li>';
+        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close']  = '</span></li>';
+
+
+        $this->pagination->initialize($config); 
+
+        $karya = $this->karya->data_karya($config['per_page'], $from);
 
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
-        $karya = $this->karya->data_karya();
 
        	$totalKarya = $this->db->get('t_karya')->num_rows();
 
         
 		$data = array(
+					'pagination'=> $this->pagination->create_links(),
 					'satker' 	=> $satker,
 					'publikasi' => $publikasi,
 					'subjek' 	=> $subjek,
@@ -45,7 +73,7 @@ class C_karya extends CI_Controller {
 	public function lihat($id)
 	{
 
-		$lihatKarya = $this->karya->dataKarya($id);
+		$lihatKarya = $this->karya->detailKarya	($id);
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
@@ -69,12 +97,45 @@ class C_karya extends CI_Controller {
 	public function tag($tags)
 	{
 
-		$tagKarya = $this->karya->tagKarya($tags);
+
+        $config['base_url'] = base_url("karya/tag/$tags"); 
+        $config['total_rows'] = $this->db->get('t_karya')->num_rows(); 
+		$config['per_page'] = 5; 
+		$from = $this->uri->segment(2);
+
+		$config['first_link']       = 'Awal';
+        $config['last_link']        = 'Akhir';
+        $config['next_link']        = 'Selanjutnya';
+        $config['prev_link']        = 'Sebelumnya';
+        $config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+        $config['full_tag_close']   = '</ul></nav></div>';
+        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close']    = '</span></li>';
+        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close']  = '</span>Next</li>';
+        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close']  = '</span></li>';
+
+
+        $this->pagination->initialize($config); 
+
+		$tags = str_replace('%20', ' ', $tags);
+
+        $tagKarya = $this->karya->tagKarya($config['per_page'], $from, $tags);
+
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
 
 		$data = array(
+
+						'pagination'=> $this->pagination->create_links(),
 					  	'title' 	=> 'karya' ,
 						'satker' 	=> $satker,
 						'publikasi' => $publikasi,
@@ -91,13 +152,42 @@ class C_karya extends CI_Controller {
 	{
 
 		$keywords = $this->input->get('pencarian');
+		$keywords = str_replace('+', ' ', $keywords);
 
-		$cariKarya = $this->karya->cariKarya($keywords);
+		$config['base_url'] = base_url("karya/cari?pencarian=$_GET[pencarian]"); 
+        $config['total_rows'] = $this->karya->cariSama($keywords); 
+		$config['per_page'] = 5; 
+		$from = $this->uri->segment(2);
+
+		$config['first_link']       = 'Awal';
+        $config['last_link']        = 'Akhir';
+        $config['next_link']        = 'Selanjutnya';
+        $config['prev_link']        = 'Sebelumnya';
+        $config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+        $config['full_tag_close']   = '</ul></nav></div>';
+        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close']    = '</span></li>';
+        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close']  = '</span>Next</li>';
+        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close']  = '</span></li>';
+
+
+        $this->pagination->initialize($config); 
+
+		$cariKarya = $this->karya->cariKarya($config['per_page'], $from, $keywords);
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
 
 		$data = array(
+						'pagination'=> $this->pagination->create_links(),
 					  	'title' 	=> 'karya' ,
 						'satker' 	=> $satker,
 						'publikasi' => $publikasi,

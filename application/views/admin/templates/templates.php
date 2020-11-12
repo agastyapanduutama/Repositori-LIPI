@@ -98,18 +98,22 @@
             
             <?php endif ?>
             
+
+            <?php if ($this->session->userdata('level') > 1): ?>
             <li class="nav-item dropdown">
               <a href="#" class="nav-link has-dropdown"><i class="far fa-file-alt"></i> <span>Repositori</span></a>
               <ul class="dropdown-menu">
-                <?php if ($this->session->userdata('level') != 3 ): ?>
-                <li><a class="nav-link" href="<?= base_url('admin/karya/konfirmasi') ?>">Konfirmasi Karya</a></li>
+                <?php if ($this->session->userdata('level') == 2 ): ?>
+                    <li><a class="nav-link" href="<?= base_url('admin/karya/konfirmasi') ?>">Konfirmasi Karya</a></li>
                 
                 <?php endif ?>
-
-                <li><a class="nav-link" href="<?= base_url('admin/karya') ?>">Data Karya</a></li>
-                <li><a class="nav-link" href="<?= base_url('admin/karya/tambah') ?>">Tambah Karya</a></li>
+                <?php if ($this->session->userdata('level') == 3): ?>
+                    <li><a class="nav-link" href="<?= base_url('admin/karya') ?>">Data Karya</a></li>
+                    <li><a class="nav-link" href="<?= base_url('admin/karya/tambah') ?>">Tambah Karya</a></li>
+                <?php endif ?>
               </ul>
             </li>
+            <?php endif ?>
             
 
 

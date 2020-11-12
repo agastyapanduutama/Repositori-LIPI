@@ -22,20 +22,15 @@ class M_karya extends CI_Model
         
         $this->db->select('id_karya,judul_karya, penulis, tahun, no_arsip, t_karya.status, t_user.nama_user');
         $this->db->from($this->table, $this->table1);
-        if ($this->session->userdata('level') > 2) {
-            $this->db->where('user', $this->session->userdata('id'));
-        }
-
-        // echo $this->tipe;
-
-        if ($this->tipe != null ) {
-            $this->db->where('t_karya.status', $this->tipe);
-        }
-
-
-
-
         $this->db->join($this->table1, 't_user.id = t_karya.user', 'left');
+        if ($this->session->userdata('level') > 1 && $this->tipe != '3') {
+            $this->db->where('user', $this->session->userdata('id_user'));
+        }
+
+        if ($this->tipe == '3') {
+            $this->db->where('t_karya.status', $this->tipe);   
+        }
+
 
         $i = 0;
 

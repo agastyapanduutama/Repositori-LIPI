@@ -53,7 +53,7 @@
 									PDF
 								</span>
 								<div class="wrap-tags flex-w">
-									<a href="<?= base_url('assets/upload/karya/')?><?= $karya->file ?>" download="">Klik untuk mengunduh</a>
+									<a href="<?= base_url('assets/uploads/karya/')?><?= $karya->file ?>" download="">Klik untuk mengunduh</a>
 								</div>
 							</div>
 							<div class="flex-m flex-w p-t-20">

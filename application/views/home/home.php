@@ -39,6 +39,7 @@
 
 						<!-- Pagination -->
 					<div class="pagination flex-m flex-w p-r-50">
-						<a href="<?= base_url()?>assets/fashe/#" class="item-pagination flex-c-m trans-0-4 active-pagination">1</a>
-						<a href="<?= base_url()?>assets/fashe/#" class="item-pagination flex-c-m trans-0-4">2</a>
+						<?php if (isset($pagination)): ?>
+							<?= $pagination ?>
+						<?php endif ?>
 					</div>
