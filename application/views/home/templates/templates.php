@@ -338,6 +338,29 @@
 							</li>
 						</ul>
 
+						<!-- Categories -->
+						<h4 class="m-text23 p-t-56 p-b-34">
+							Tahun Publikasi
+						</h4>
+
+						<ul>
+							<?php foreach ($tahun as $sub) : ?>
+							<li class="p-t-6 p-b-8 bo6">
+								 <a href="<?= base_url('karya/tahun/' . $sub->tahun) ?>"><?= $sub->tahun ?> </a>
+							</li>
+							<?php endforeach ?>
+
+
+							<li class="p-t-6 p-b-8 bo7">
+								<a href="<?= base_url('karya/satuan/lebih/tahun')?>" class="s-text13 p-t-5 p-b-5">
+									Lihat Lebih
+								</a>
+							</li>
+						</ul>
+
+
+						
+
 
 					
 					</div>

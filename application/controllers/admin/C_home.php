@@ -28,7 +28,7 @@ class C_home extends CI_Controller {
                       'to_kontrib'      => $total_kontributor,
                       'to_pusta'        => $total_pustakawan,
                       'karya'           => $karya,
-                      'title'           => 'Dashboard - Repositori Karya' ,
+                      'title'           => 'Dashboard - Repositori Karya Lembaga Ilmu Pengetahuan Indonesia' ,
                       'konten'          => 'admin/home/dashboard' 
                     );
 

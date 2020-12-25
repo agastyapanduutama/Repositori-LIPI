@@ -110,6 +110,15 @@ class M_home extends CI_Model {
         return $query->result();
     }
 
+    public function tahun()
+    {
+        $this->db->distinct();
+        $this->db->select('tahun');
+        $this->db->from('t_karya');
+        return $this->db->get();
+
+    }
+
 
 
 }

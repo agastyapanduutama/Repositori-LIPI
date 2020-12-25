@@ -49,8 +49,10 @@
 
             <div class="form-group">
                 <label>tanggal post</label>
-                <input type="date" name="tanggal" id="tanggal" class="form-control">
+                <input type="date" name="tanggal" value="<?= date('Y/m/d')?>" id="tanggal" class="form-control">
+           
             </div>
+            
 
             <div class="form-group">
                 <label>tahun</label>

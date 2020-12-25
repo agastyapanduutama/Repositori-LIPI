@@ -55,10 +55,15 @@ class C_karya extends CI_Controller {
 
        	$totalKarya = $this->db->get('t_karya')->num_rows();
 
+       	$tahun = $this->karya->tahun();
         
+       	// $this->req->print($tahun);
+
+
 		$data = array(
 					'pagination'=> $this->pagination->create_links(),
 					'satker' 	=> $satker,
+					'tahun' 	=> $tahun->result(),
 					'publikasi' => $publikasi,
 					'subjek' 	=> $subjek,
                     'karya'     => $karya,
