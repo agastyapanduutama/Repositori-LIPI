@@ -80,6 +80,7 @@ class Request extends CI_Model
         return htmlspecialchars(ltrim(rtrim($_POST[$input])));
     }
 
+
     function all($guarded = null)
     {
         $request = $_POST;

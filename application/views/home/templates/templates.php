@@ -286,7 +286,7 @@
 						<ul>
 							<?php foreach ($publikasi as $pub) : ?>
 							<li class="p-t-6 p-b-8 bo6">
-								 <a href="<?= base_url('karya/publikasi/' . $pub->id_publikasi) ?>"><?= $pub->nama_publikasi ?> </a>
+								 <a href="<?= base_url('karya/publikasi/' . $pub->id_publikasi) ?>"><?= $pub->nama_publikasi ?> (<?= $pub->total?>)</a>
 							</li>
 							<?php endforeach ?>
 
@@ -306,7 +306,7 @@
 						<ul>
 							<?php foreach ($satker as $sat) : ?>
 							<li class="p-t-6 p-b-8 bo6">
-								 <a href="<?= base_url('karya/satker/' . $sat->id_satker) ?>"><?= $sat->nama_satker ?> </a>
+								 <a href="<?= base_url('karya/satker/' . $sat->id_satker) ?>"><?= $sat->nama_satker ?> (<?= $sat->total?>) </a>
 							</li>
 							<?php endforeach ?>
 
@@ -326,7 +326,7 @@
 						<ul>
 							<?php foreach ($subjek as $sub) : ?>
 							<li class="p-t-6 p-b-8 bo6">
-								 <a href="<?= base_url('karya/subjek/' . $sub->id_subjek) ?>"><?= $sub->nama_subjek ?> </a>
+								 <a href="<?= base_url('karya/subjek/' . $sub->id_subjek) ?>"><?= $sub->nama_subjek ?> (<?= $sub->total?>) </a>
 							</li>
 							<?php endforeach ?>
 
@@ -344,9 +344,9 @@
 						</h4>
 
 						<ul>
-							<?php foreach ($tahun as $sub) : ?>
+							<?php foreach ($tahun as $tah) : ?>
 							<li class="p-t-6 p-b-8 bo6">
-								 <a href="<?= base_url('karya/tahun/' . $sub->tahun) ?>"><?= $sub->tahun ?> </a>
+								 <a href="<?= base_url('karya/tahun/' . $tah->tahun) ?>"><?= $tah->tahun ?> (<?= $tah->total ?>) </a>
 							</li>
 							<?php endforeach ?>
 

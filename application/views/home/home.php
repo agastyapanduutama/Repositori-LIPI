@@ -1,3 +1,7 @@
+		<?php if (isset($_GET['pencarian'])) { $pencarian = $_GET['pencarian']; ?>
+		<h4> Hasil pencarian dari  "<b><?= $pencarian?></b>" : <br><br></h4>
+		<?php } ?>
+		Menampilkan <?= $awal?> sampai <?= $akhir?> dari <?= $total?> karya
 		<?php foreach ($karya as $kar): ?>
 							
 						<div class="item-blog p-b-80">

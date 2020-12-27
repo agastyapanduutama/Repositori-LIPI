@@ -17,6 +17,7 @@ class C_karya extends CI_Controller {
 	}
 
 
+
 	public function beranda($page = null)
 	{
 
@@ -59,9 +60,16 @@ class C_karya extends CI_Controller {
         
        	// $this->req->print($tahun);
 
+		$sampai = $from + count($karya);
+		if ($from == '') {
+			$from = 1;
+		}
 
 		$data = array(
 					'pagination'=> $this->pagination->create_links(),
+					'awal'		=> $from,
+					'akhir'		=> $sampai,
+					'total'		=> $config['total_rows'],
 					'satker' 	=> $satker,
 					'tahun' 	=> $tahun->result(),
 					'publikasi' => $publikasi,
@@ -81,6 +89,7 @@ class C_karya extends CI_Controller {
 		$lihatKarya = $this->karya->detailKarya	($id);
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
+       	$tahun = $this->karya->tahun();
 		$publikasi = $this->publikasi->data();
 
 		$bongkartags = explode(',', $lihatKarya->tag);
@@ -88,6 +97,7 @@ class C_karya extends CI_Controller {
 		$data = array(
 					  	'title' 	=> $lihatKarya->judul_karya ,
 						'satker' 	=> $satker,
+						'tahun' 	=> $tahun->result(),
 						'publikasi' => $publikasi,
 						'subjek' 	=> $subjek,
 						'karya' 	=> $lihatKarya,
@@ -137,6 +147,7 @@ class C_karya extends CI_Controller {
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
+		$tahun = $this->karya->tahun();
 
 		$data = array(
 
@@ -145,6 +156,7 @@ class C_karya extends CI_Controller {
 						'satker' 	=> $satker,
 						'publikasi' => $publikasi,
 						'subjek' 	=> $subjek,
+						'tahun' 	=> $tahun->result(),
 						'karya' 	=> $tagKarya,
 					  	'konten' 	=> 'home/home',
 
@@ -156,13 +168,14 @@ class C_karya extends CI_Controller {
 	public function cari()
 	{
 
-		$keywords = $this->input->get('pencarian');
+		$_POST = $_GET;
+		$keywords = $this->input->post('pencarian');
 		$keywords = str_replace('+', ' ', $keywords);
 
-		$config['base_url'] = base_url("karya/cari?pencarian=$_GET[pencarian]"); 
+		$config['base_url'] = base_url("karya/cari?pencarian=$_GET[pencarian]&page="); 
         $config['total_rows'] = $this->karya->cariSama($keywords); 
 		$config['per_page'] = 5; 
-		$from = $this->uri->segment(2);
+		$from = $this->uri->segment(3);
 
 		$config['first_link']       = 'Awal';
         $config['last_link']        = 'Akhir';
@@ -190,16 +203,26 @@ class C_karya extends CI_Controller {
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
+		$tahun = $this->karya->tahun();
+
+
+		$sampai = $from + count($cariKarya);
+		if ($from == '') {
+			$from = 1;
+		}
 
 		$data = array(
-						'pagination'=> $this->pagination->create_links(),
-					  	'title' 	=> 'karya' ,
-						'satker' 	=> $satker,
-						'publikasi' => $publikasi,
-						'subjek' 	=> $subjek,
-						'karya' 	=> $cariKarya,
-					  	'konten' 	=> 'home/home',
-
+					'pagination'=> $this->pagination->create_links(),
+					'awal'		=> $from,
+					'akhir'		=> $sampai,
+					'total'		=> $config['total_rows'],
+					'title' 	=> 'karya' ,
+					'satker' 	=> $satker,
+					'tahun' 	=> $tahun->result(),
+					'publikasi' => $publikasi,
+					'subjek' 	=> $subjek,
+					'karya' 	=> $cariKarya,
+					'konten' 	=> 'home/home',
 					   );
 
 		$this->load->view('home/templates/templates', $data, FALSE);		
@@ -226,10 +249,12 @@ class C_karya extends CI_Controller {
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
+		$tahun = $this->karya->tahun();
 
 		$data = array(
 					  	'title' 	=> 'karya' ,
 						'satker' 	=> $satker,
+						'tahun' 	=> $tahun->result(),
 						'publikasi' => $publikasi,
 						'subjek' 	=> $subjek,
 						'karya' 	=> $dataSatuan,

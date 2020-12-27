@@ -113,8 +113,11 @@ class M_home extends CI_Model {
     public function tahun()
     {
         $this->db->distinct();
-        $this->db->select('tahun');
+        $this->db->select('count(tahun) as total, tahun');
         $this->db->from('t_karya');
+        $this->db->group_by('tahun');
+        $this->db->order_by('tahun', 'desc');
+        $this->db->limit(3);
         return $this->db->get();
 
     }
