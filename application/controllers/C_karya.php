@@ -112,11 +112,13 @@ class C_karya extends CI_Controller {
 	public function tag($tags)
 	{
 
-
-        $config['base_url'] = base_url("karya/tag/$tags"); 
-        $config['total_rows'] = $this->db->get('t_karya')->num_rows(); 
+		$tags = str_replace('%20', ' ', $tags);
+		$tagKarya = $this->karya->tagKaryaTotal($tags);
+        $config['base_url'] = base_url("karya/tag/$tags/"); 
+        // $config['total_rows'] = $this->db->get('t_karya')->num_rows(); 
+        $config['total_rows'] = count($tagKarya); 
 		$config['per_page'] = 5; 
-		$from = $this->uri->segment(2);
+		$from = $this->uri->segment(4);
 
 		$config['first_link']       = 'Awal';
         $config['last_link']        = 'Akhir';
@@ -149,10 +151,20 @@ class C_karya extends CI_Controller {
 		$publikasi = $this->publikasi->data();
 		$tahun = $this->karya->tahun();
 
+		// $this->req->print($tagKarya);
+
+		$sampai = $from + count($tagKarya);
+		if ($from == '') {
+			$from = 1;
+		}
+
 		$data = array(
 
 						'pagination'=> $this->pagination->create_links(),
-					  	'title' 	=> 'karya' ,
+      					'title' 	=> 'karya' ,
+						'awal'		=> $from,
+						'akhir'		=> $sampai,
+						'total'		=> $config['total_rows'],
 						'satker' 	=> $satker,
 						'publikasi' => $publikasi,
 						'subjek' 	=> $subjek,
@@ -228,36 +240,144 @@ class C_karya extends CI_Controller {
 		$this->load->view('home/templates/templates', $data, FALSE);		
 	}
 
-
 	public function karyaSatuan($id)
 	{
 
 		if($this->uri->segment(2) == "publikasi") {
+			$uri = "publikasi";
 			$tipe = $this->karya->satuan = "1";	
 			$idData = $this->uri->segment(3);
 		}
 		if($this->uri->segment(2) == "satker") {
+			$uri = "satker";
 			$tipe = $this->karya->satuan = 	"2";
 			$idData = $this->uri->segment(3);
 		}
 		if($this->uri->segment(2) == "subjek") {
+			$uri = "subjek";
 			$tipe = $this->karya->satuan = "3";
 			$idData = $this->uri->segment(3);
 		}
 
-		$dataSatuan = $this->karya->dataSatuan($idData);
+		$dataSatuan = $this->karya->dataSatuanAll($idData);
+		$config['base_url'] = base_url("karya/$uri/$idData/");
+		$config['total_rows'] = count($dataSatuan);
+		$config['per_page'] = 5;
+		
+		// $from = $this->uri->segment(4);
+		$from = ($this->uri->segment(4) == "") ? 1 : $this->uri->segment(4) ;
+		
+
+		$config['first_link']       = 'Awal';
+		$config['last_link']        = 'Akhir';
+		$config['next_link']        = 'Selanjutnya';
+		$config['prev_link']        = 'Sebelumnya';
+		$config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+		$config['full_tag_close']   = '</ul></nav></div>';
+		$config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+		$config['num_tag_close']    = '</span></li>';
+		$config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+		$config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+		$config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+		$config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+		$config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+		$config['prev_tagl_close']  = '</span>Next</li>';
+		$config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+		$config['first_tagl_close'] = '</span></li>';
+		$config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+		$config['last_tagl_close']  = '</span></li>';
+
+
+		$this->pagination->initialize($config); 
+
+		$dataSatuan = $this->karya->dataSatuan($config['per_page'], $from, $idData);
+
+		$sampai = $from + count($dataSatuan);
+		if ($from == '') {
+			$from = 1;
+		}
+
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
 		$tahun = $this->karya->tahun();
 
 		$data = array(
-					  	'title' 	=> 'karya' ,
+						'pagination' => $this->pagination->create_links(),
+					  	'title' 	=> 'karya',
+						'awal'		=> $from,
+						'akhir'		=> $sampai,
+						'total'		=> $config['total_rows'],
 						'satker' 	=> $satker,
 						'tahun' 	=> $tahun->result(),
 						'publikasi' => $publikasi,
 						'subjek' 	=> $subjek,
 						'karya' 	=> $dataSatuan,
+					  	'konten' 	=> 'home/home',
+
+					   );
+
+		$this->load->view('home/templates/templates', $data, FALSE);		
+	}
+
+	public function tahun($tahun)
+	{
+		$dataTahun = $this->db->get_where('t_karya', ['tahun' => $tahun])->num_rows();
+		$config['base_url'] = base_url("karya/tahun/$tahun/");
+		$config['total_rows'] = $dataTahun;
+		$config['per_page'] = 5;
+
+		$from = ($this->uri->segment(4) == "") ? 0 : $this->uri->segment(4);
+
+		$config['first_link']       = 'Awal';
+		$config['last_link']        = 'Akhir';
+		$config['next_link']        = 'Selanjutnya';
+		$config['prev_link']        = 'Sebelumnya';
+		$config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+		$config['full_tag_close']   = '</ul></nav></div>';
+		$config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+		$config['num_tag_close']    = '</span></li>';
+		$config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+		$config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+		$config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+		$config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+		$config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+		$config['prev_tagl_close']  = '</span>Next</li>';
+		$config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+		$config['first_tagl_close'] = '</span></li>';
+		$config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+		$config['last_tagl_close']  = '</span></li>';
+
+
+		$this->pagination->initialize($config); 
+
+		$dataTahun = $this->karya->dataTahun($config['per_page'], $from, $tahun);
+
+		$sampai = $from + count($dataTahun);
+		if ($from == 0) {
+			$from = 1;
+		}
+
+
+		// $this->req->print($this->pagination->create_links());
+
+
+		$satker = $this->satker->data();
+		$subjek = $this->subjek->data();
+		$publikasi = $this->publikasi->data();
+		$tahun = $this->karya->tahun();
+
+		$data = array(
+						'pagination' => $this->pagination->create_links(),
+					  	'title' 	=> 'karya',
+						'awal'		=> $from,
+						'akhir'		=> $sampai,
+						'total'		=> $config['total_rows'],
+						'satker' 	=> $satker,
+						'tahun' 	=> $tahun->result(),
+						'publikasi' => $publikasi,
+						'subjek' 	=> $subjek,
+						'karya' 	=> $dataTahun,
 					  	'konten' 	=> 'home/home',
 
 					   );
@@ -276,17 +396,24 @@ class C_karya extends CI_Controller {
 		if($this->uri->segment(4) == "subjek") {
 			$tipe = $this->karya->satuan = "3";
 		}
+		if($this->uri->segment(4) == "tahun") {
+			$tipe = $this->karya->satuan = "4";
+		}
 
 		$dataSatuan = $this->karya->ambilSatuan($satuan);
 		$satker = $this->satker->data();
 		$subjek = $this->subjek->data();
 		$publikasi = $this->publikasi->data();
+		$tahun = $this->karya->tahun();
+
+		// $this->req->print($dataSatuan);
 
 		$data = array(
 					  	'title' 	=> 'karya' ,
 						'satker' 	=> $satker,
 						'publikasi' => $publikasi,
 						'subjek' 	=> $subjek,
+						'tahun' 	=> $tahun->result(),
 						'satuan' 	=> $dataSatuan,
 					  	'konten' 	=> 'home/satuan',
 

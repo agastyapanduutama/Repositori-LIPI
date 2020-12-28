@@ -6,14 +6,18 @@
 								<?php foreach ($satuan as $sat): ?>
 									<?php 
 
+
 									if($this->uri->segment(4) == "publikasi") {
-										$linkNa = "<a href='../../../karya/publikasi/$sat->id_publikasi'>$sat->nama_publikasi </a>";
+										$linkNa = "<a href='../../../karya/publikasi/$sat->id_publikasi/1'>$sat->nama_publikasi ($sat->total)</a>";
 									}
 									if($this->uri->segment(4) == "satker") {
-										$linkNa = "<a href='../../../karya/publikasi/$sat->id_satker'>$sat->nama_satker </a>";
+										$linkNa = "<a href='../../../karya/publikasi/$sat->id_satker/1'>$sat->nama_satker ($sat->total)</a>";
 									}
 									if($this->uri->segment(4) == "subjek") {
-										$linkNa = "<a href='../../../karya/subjek/$sat->id_subjek'>$sat->nama_subjek </a>";
+										$linkNa = "<a href='../../../karya/subjek/$sat->id_subjek/1'>$sat->nama_subjek ($sat->total)</a>";
+									}
+									if($this->uri->segment(4) == "tahun") {
+										$linkNa = "<a href='../../../karya/tahun/$sat->tahun/1'>$sat->tahun ($sat->total)</a>";
 									}
 
 									 ?>

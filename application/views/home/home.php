@@ -1,6 +1,42 @@
 		<?php if (isset($_GET['pencarian'])) { $pencarian = $_GET['pencarian']; ?>
 		<h4> Hasil pencarian dari  "<b><?= $pencarian?></b>" : <br><br></h4>
 		<?php } ?>
+
+		<?php 
+		
+		if (strpos($_SERVER['REQUEST_URI'], 'karya/tag') != '') {
+			$tagar = $this->uri->segment(3);
+			$tags = str_replace('%20', ' ', $tagar);
+			echo '<h4>Menampilkan karya berdasarkan Tag "<b>'.$tags. '</b>" :<br><br></h4> ' ;
+		} 
+		
+
+		$id = $this->uri->segment(3);
+		
+		if (strpos($_SERVER['REQUEST_URI'], 'karya/publikasi') != '') {
+			$data = $this->db->get_where('t_publikasi',['id_publikasi' => $id])->row();
+			echo "<h4>Menampilkan karya berdasarkan Publikasi <b>\"$data->nama_publikasi\"</b><br><br></h4>";
+		}
+		
+		if (strpos($_SERVER['REQUEST_URI'], 'karya/satker') != '') {
+			$data = $this->db->get_where('t_satker',['id_satker' => $id])->row();
+			echo "<h4>Menampilkan karya berdasarkan Satuan Kerja <b>\"$data->nama_satker\"</b><br><br></h4>";
+		}
+		
+		if (strpos($_SERVER['REQUEST_URI'], 'karya/subjek') != '') {
+			$data = $this->db->get_where('t_subjek',['id_subjek' => $id])->row();
+			echo "<h4>Menampilkan karya berdasarkan Subjek <b>\"$data->nama_subjek\"</b><br><br></h4>";
+		}
+		
+		if (strpos($_SERVER['REQUEST_URI'], 'karya/tahun') != '') {
+			$data = $this->db->get_where('t_karya',['tahun' => $id])->row();
+			echo "<h4>Menampilkan karya berdasarkan Tahun <b>\"$data->tahun\"</b><br><br></h4>";
+		}
+
+		
+		?>
+
+
 		Menampilkan <?= $awal?> sampai <?= $akhir?> dari <?= $total?> karya
 		<?php foreach ($karya as $kar): ?>
 							
